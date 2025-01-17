@@ -89,7 +89,7 @@ app.get('/api/books', (req, res) => {
 });
 
 // Route for Borrowing a Book
-app.post('/api/borrow', verifyToken, (req, res) => {
+app.post('/api/borrow-book', verifyToken, (req, res) => {
   const { bookId } = req.body;
 
   if (!bookId) {
@@ -136,24 +136,62 @@ app.post('/api/borrow', verifyToken, (req, res) => {
 
 // Route for Fetching Borrowed Books (Staff only)
 app.get('/api/borrowed-books', verifyToken, (req, res) => {
-  const userRole = req.user.role;
-
-  if (userRole !== 'staff') {
+  if (req.user.role !== 'staff') {
     return res.status(403).send('Access denied. Staff only.');
   }
 
   db.query(
-    `SELECT borrowed_books.borrow_id, borrowed_books.borrow_date, borrowed_books.due_date, 
-            books.title AS book_title, users.full_name 
-     FROM borrowed_books 
-     JOIN books ON borrowed_books.book_id = books.book_id
-     JOIN users ON borrowed_books.user_id = users.user_id`, 
+    `SELECT bb.borrow_id, bb.borrow_date, bb.due_date, u.full_name, b.title, bb.book_id
+     FROM borrowed_books bb
+     JOIN users u ON bb.user_id = u.user_id
+     JOIN books b ON bb.book_id = b.book_id`,
     (err, results) => {
       if (err) {
         console.error('Error fetching borrowed books:', err);
         return res.status(500).send('Error fetching borrowed books');
       }
       res.json(results);
+    }
+  );
+});
+
+// Route: Return a Book
+app.post('/api/return-book', verifyToken, (req, res) => {
+  const { borrowId } = req.body;
+
+  if (!borrowId) {
+    return res.status(400).send('Borrow ID is required');
+  }
+
+  // Fetch the book_id using only borrowId
+  db.query(
+    'SELECT book_id FROM borrowed_books WHERE borrow_id = ?',
+    [borrowId],
+    (err, results) => {
+      if (err || results.length === 0) {
+        console.error('Error fetching borrow record:', err || 'No record found');
+        return res.status(404).send('No borrow record found for the given ID');
+      }
+
+      const bookId = results[0].book_id;
+
+      // Delete the borrow record
+      db.query('DELETE FROM borrowed_books WHERE borrow_id = ?', [borrowId], (err) => {
+        if (err) {
+          console.error('Error deleting borrow record:', err);
+          return res.status(500).send('Error returning book');
+        }
+
+        // Increment the stock for the returned book
+        db.query('UPDATE books SET stock = stock + 1 WHERE book_id = ?', [bookId], (err) => {
+          if (err) {
+            console.error('Error updating book stock:', err);
+            return res.status(500).send('Error updating book stock');
+          }
+
+          res.status(200).send('Book returned successfully');
+        });
+      });
     }
   );
 });
