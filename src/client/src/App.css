@@ -1,0 +1,156 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.light-mode {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.dark-mode {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+/* Header and Navbar */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #3f51b5;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar {
+  display: flex;
+  gap: 15px;
+}
+
+.navbar a,
+.navbar button {
+  color: white;
+  font-size: 16px;
+  padding: 10px 15px;
+  border: none;
+  background: #4caf50; /* Green background for buttons */
+  cursor: pointer;
+  text-decoration: none; /* No underline */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border-radius: 5px;
+}
+
+.navbar button.dark-mode {
+  background-color: #3f51b5; /* Purple-blue for dark mode */
+}
+
+.navbar a:hover,
+.navbar button:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* Homepage */
+.homepage {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.homepage h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.homepage button {
+  margin: 10px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.homepage button.light-mode {
+  background-color: #4caf50; /* Green button for light mode */
+  color: white;
+}
+
+.homepage button.dark-mode {
+  background-color: #3f51b5; /* Purple-blue button for dark mode */
+  color: white;
+}
+
+.homepage button:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+  cursor: pointer;
+  font-size: 20px;
+  border: none;
+  background: none;
+  color: inherit;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  transform: rotate(20deg);
+  opacity: 0.8;
+}
+
+/* Centered Layout */
+.main-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Form Styles */
+form {
+  max-width: 350px;
+  width: 100%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  padding-right: 2%;
+}
+
+.dark-mode form {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+form label {
+  font-weight: bold;
+}
+
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus {
+  border-color: #3f51b5; /* Focused Border Color */
+  outline: none;
+}
